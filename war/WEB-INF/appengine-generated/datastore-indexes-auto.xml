@@ -1,4 +1,4 @@
-<!-- Indices written at Sun, 21 Aug 2011 17:35:51 UTC -->
+<!-- Indices written at Sun, 21 Aug 2011 21:55:56 UTC -->
 
 <datastore-indexes>
 
@@ -10,6 +10,11 @@
     <!-- Used 2 times in query history -->
     <datastore-index kind="Customer" ancestor="true" source="auto">
         <property name="customers_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Invoice" ancestor="true" source="auto">
+        <property name="generatedInvoices_INTEGER_IDX" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

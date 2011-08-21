@@ -65,6 +65,7 @@ to include your name with greetings you post.</p>
 	
 	
 	company.addProject(p2);
+	//p2.fileInvoice(new Invoice(new Customer("Pelle"),17.0f,new Date(), new Date()));
 	
 	
 
@@ -74,6 +75,8 @@ to include your name with greetings you post.</p>
 	for(int i=0;i<800;i+=5){
 		today.setTime(today.getTime()+3600*1000*24L*5);
 		System.out.print("Days: " + (today.getTime()-startDate.getTime())/(3600*1000*24L));
+		Date d = new Date(today.getTime());
+		company.checkAndDoInvoicing(d);
 		
 		%> Hello: <%= company.checkAndDoInvoicing(new Date(today.getTime())) %> <BR/> <%
 	}
@@ -91,6 +94,7 @@ to include your name with greetings you post.</p>
 
 		
 	    pm.makePersistent(company);
+	    //pm.makePersistent(company.getProjectList());
 	} finally {
 	    pm.close();
 	}

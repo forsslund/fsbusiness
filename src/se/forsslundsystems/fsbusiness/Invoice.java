@@ -1,7 +1,9 @@
 package se.forsslundsystems.fsbusiness;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -23,7 +25,7 @@ public class Invoice {
 	public int getId() { return id; }
 	
 	@Persistent
-	private Customer customer;
+	private Key customer; // Not type "Customer"!! 
 	
 	@Persistent
 	private float amount;
@@ -35,17 +37,18 @@ public class Invoice {
 	private Date paymentDate;
 	
 	
-	public Invoice(Company company, Customer customer, float amount, Date invoiceDate, Date paymentDate){
-		this.customer =  customer;
+	public Invoice(Key customerKey, float amount, Date invoiceDate, Date paymentDate){
+		this.customer =  customerKey;
 		this.amount = amount;
 		this.invoiceDate = invoiceDate;
 		this.paymentDate = paymentDate;
-		this.id = company.getNextInvoiceIdAndIncrement();
+		this.id = 17;//company.getNextInvoiceIdAndIncrement();
 	}
 
 
 	public Customer getCustomer() {
-		return customer;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+	    return pm.getObjectById(Customer.class, customer);
 	}
 	
 	public float getAmount() {

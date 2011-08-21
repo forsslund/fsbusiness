@@ -71,6 +71,10 @@
     <%	
     				}
     
+    				for (Invoice i : prj.getGeneratedInvoices()){
+	%>---Invoice: <%=i.getCustomer().getCompanyName()%> <%=i.getInvoiceDate()%> <%=i.getAmount()%><BR/>
+    <%	
+    				}
     
     
 				}

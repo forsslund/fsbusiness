@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -23,14 +24,16 @@ public class Project {
 	private String name;
 	
 	@Persistent
-    //@Element(dependent = "true")
+    @Element(dependent = "true")
+	private List<Invoice> generatedInvoices;
+	
+	@Persistent
+    @Element(dependent = "true")
 	private List<Customer> customers;
 
 	public List<Customer> getCustomers() { return customers; }
 
-	@Persistent
-    //@Element(dependent = "true")
-	private List<Invoice> generatedInvoices;
+
 	
 	public List<Invoice> getGeneratedInvoices(){
 		return generatedInvoices;
@@ -57,9 +60,7 @@ public class Project {
 //	@Persistent
 //	private Date lastInvoiceDate;
 	
-	public void fileInvoice(Invoice i){
-		generatedInvoices.add(i);
-	}
+
 	
 	public int daysUntilNextInvoice(Date today){
 		// if not recurring, invoice in 10 years
@@ -90,8 +91,8 @@ public class Project {
 			// OK, time for invoice!
 			int invoices=0;
 			for(Customer c : getCustomers()){
-				Invoice i = new Invoice(company, c,getStandardInvoiceAmount(),checkDate,new Date(checkDate.getTime()+30*3600*1000*24L));
-				fileInvoice(i);
+				Invoice i = new Invoice(c.getKey(),getStandardInvoiceAmount(),checkDate,new Date(checkDate.getTime()+30*3600*1000*24L));
+				this.fileInvoice(i);
 				invoices++;
 			}			
 			
@@ -126,8 +127,17 @@ public class Project {
 		
 	public void addCustomer(Customer customer){
 		customers.add(customer);
+		// We need to make persistent..?
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+		    pm.makePersistent(customer);
+		} finally {
+		    pm.close();
+		}		
 	}
-	
+	public void fileInvoice(Invoice invoice){
+		generatedInvoices.add(invoice);
+	}
 	
 	public float getStandardInvoiceAmount() {
 		return standardInvoiceAmount;

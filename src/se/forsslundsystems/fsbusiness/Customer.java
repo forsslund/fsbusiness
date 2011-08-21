@@ -12,6 +12,8 @@ public class Customer {
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Key key;
+	
+	public Key getKey() { return key; }
 
 	@Persistent
 	private String companyName;
